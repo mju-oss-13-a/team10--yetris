@@ -277,8 +277,8 @@ void game_update_level(game_s* g)
 // this is getting too long - need to create a math function
 	switch (g->lines)
 	{
-	case 0:	  g->level = 1;	 break; /* 1000ms */
-	case 5:	  g->level = 2;	 break;
+	case 0:	  g->level = 1;  break; /* 1000ms */
+	case 5:	  g->level = 2;  break;
 	case 10:  g->level = 3;	 break;
 	case 15:  g->level = 4;	 break;
 	case 20:  g->level = 5;	 break;
@@ -300,30 +300,26 @@ void game_update_level(game_s* g)
 
 void game_update_speed(game_s* g)
 {
-	switch (g->level)
+	
+	board_s* b = &(g->board);
+
+	switch (g->gameplay_s)
 	{
-	case 1:	 g->speed = INITIAL_SPEED; break; /* 1000ms */
-	case 2:	 g->speed = 900;  break;
-	case 3:	 g->speed = 850;  break;
-	case 4:	 g->speed = 800;  break;
-	case 5:	 g->speed = 750;  break;
-	case 6:	 g->speed = 700;  break;
-	case 7:	 g->speed = 650;  break;
-	case 8:	 g->speed = 600;  break;
-	case 9:	 g->speed = 550;  break;
-	case 10: g->speed = 500;  break;
-	case 11: g->speed = 450;  break;
-	case 12: g->speed = 400;  break;
-	case 13: g->speed = 350;  break;
-	case 14: g->speed = 300;  break;
-	case 15: g->speed = 250;  break;
-	case 16: g->speed = 200;  break;
-	case 17: g->speed = 150;  break;
-	case 18: g->speed = 100;  break;
+	case 0:	 g->speed = INITIAL_SPEED; break; /* 1000ms */
+	case 10: g->speed = 900;
+			make_line(b); break;
+	case 35: g->speed = 750;  break;
+	case 55: g->speed = 600;  break;
+	case 75: g->speed = 450;  break;
+	        	make_line(b); break;
+	case 95: g->speed = 300;  break;
+	case 115: g->speed = 150;  break;
+	case 150: g->speed = 100;  break;
+	        	make_line(b); break;
 	default: g->speed = g->speed; break;
 	}
 }
-
+//void game_update_line(
 /** Saves current piece for later use. If there's already one on the
  *	'hold slot', switch them.
  *	@note Can only do this once per drop.
@@ -387,6 +383,8 @@ bool game_hold_piece(game_s* g)
  *	Also, when you hard drop a piece, it's 10 points for free.
  *	Soft drops are the same (although they should be based on height.
  */
+
+
 bool game_delete_possible_lines(game_s* g)
 {
 	board_s* b = &(g->board);
@@ -500,6 +498,7 @@ void game_update_gameplay_time(game_s* g)
 	g->gameplay_m = timer_delta_m(&(g->global_timer));
 	g->gameplay_h = timer_delta_h(&(g->global_timer));
 	timer_unpause(&(g->global_timer));
+	game_update_speed(g);
 }
 
 /** Perform actions based on #input.

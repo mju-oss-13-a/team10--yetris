@@ -25,6 +25,7 @@
 #include "board.h"
 #include "block.h"
 #include "piece.h"
+#include "game.h"
 
 board_s new_board()
 {
@@ -56,6 +57,23 @@ void board_lock_piece(board_s* b, piece_s* p)
  *
  *  @note I know this function's ugly... I'll fix that later
  */
+
+
+void make_line(board_s *b){
+
+	int j,i;
+
+	for (j =0 ; j < BOARD_HEIGHT ;  j++)
+	{
+		for (i = 0; i < BOARD_WIDTH; i++)
+		{
+			b->block[i][j]    = b->block[i][j + 1];
+			b->block[i][j].y -= 1;
+		}
+	}
+	
+}
+
 void board_delete_lines(board_s* b, bool lines[])
 {
 	int i, j, k;
